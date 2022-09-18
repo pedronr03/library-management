@@ -24,13 +24,13 @@ class Book {
   publishedDate: Date;
 
   @Field(type => Category)
-  category: Category;
+  categories: Category;
 
   @Field(type => Author)
   author: Author;
 
-  @Field(type => Photo)
-  photo: Photo;
+  @Field(type => Photo, { nullable: true })
+  photo?: Photo;
 }
 
 export default Book;
