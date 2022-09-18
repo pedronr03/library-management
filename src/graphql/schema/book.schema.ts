@@ -23,8 +23,8 @@ class Book {
   @Field()
   publishedDate: Date;
 
-  @Field(type => Category)
-  categories: Category;
+  @Field(type => [Category])
+  categories: Category[];
 
   @Field(type => Author)
   author: Author;
