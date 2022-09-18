@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, Float, Int, ObjectType } from "type-graphql";
 import Author from "./author.schema";
 import Category from "./category.schema";
 import Photo from "./photo.schema";
@@ -17,7 +17,7 @@ class Book {
   @Field(type => Int)
   totalPages: number;
 
-  @Field(type => Int)
+  @Field(type => Float)
   rating: number;
 
   @Field()
