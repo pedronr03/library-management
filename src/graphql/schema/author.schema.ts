@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "type-graphql";
+import Book from "./book.schema";
 
 @ObjectType()
 class Author {
@@ -13,6 +14,9 @@ class Author {
 
   @Field()
   birthDate: Date;
+
+  @Field(type => [Book])
+  books: Book[]
 }
 
 export default Author;
