@@ -54,7 +54,7 @@ class BookResolver {
   }
 
   @Mutation((returns) => Book)
-  async remove(@Arg("id") id: number) {
+  async removeBook(@Arg("id") id: number) {
     const bookSearch = await this.getBook(id);
     await this.prisma.book.delete({ where: { id } });
     return bookSearch;
@@ -77,16 +77,21 @@ class BookResolver {
 
   @FieldResolver()
   async author(@Root() book: BookEntity) {
-    const author = this.prisma.author.findUnique({ where: { id: book.authorId } });
+    const author = this.prisma.author.findUnique({
+      where: { id: book.authorId },
+    });
     return author;
   }
 
   private validatePublishedDate(publishedDate: Date) {
-    const date = publishedDate
-      .toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+    const date = publishedDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
     const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
     const validate = regex.test(date);
-    if (!validate) throw new Error('publishedDate is invalid');
+    if (!validate) throw new Error("publishedDate is invalid");
   }
 
   private async validateForeignKeys(
