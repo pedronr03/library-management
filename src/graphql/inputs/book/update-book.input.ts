@@ -20,7 +20,6 @@ class UpdateBookInput {
   rating?: number;
 
   @Field({ nullable: true })
-  @IsDate()
   publishedDate?: Date;
 
   @Field(type => Int, { nullable: true })

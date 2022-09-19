@@ -31,6 +31,9 @@ class BookResolver {
   @Mutation((returns) => Book)
   async createBook(@Arg("bookData") bookData: CreateBookInput) {
     await this.validateForeignKeys(bookData.authorId, bookData?.photoId);
+    const publishedDate = new Date(bookData.publishedDate);
+    this.validatePublishedDate(publishedDate);
+    bookData.publishedDate = publishedDate;
     const newBook = this.prisma.book.create({ data: bookData });
     return newBook;
   }
@@ -38,8 +41,11 @@ class BookResolver {
   @Mutation((returns) => Book)
   async updateBook(@Arg("bookData") bookData: UpdateBookInput) {
     const bookSearch = await this.getBook(bookData.id);
-    const updatedBook = { ...bookSearch, bookData };
+    const updatedBook = { ...bookSearch, ...bookData };
     await this.validateForeignKeys(updatedBook.authorId, updatedBook?.photoId);
+    const publishedDate = new Date(updatedBook.publishedDate);
+    this.validatePublishedDate(publishedDate);
+    updatedBook.publishedDate = publishedDate;
     await this.prisma.book.update({
       where: { id: updatedBook.id },
       data: updatedBook,
@@ -73,6 +79,14 @@ class BookResolver {
   async author(@Root() book: BookEntity) {
     const author = this.prisma.author.findUnique({ where: { id: book.authorId } });
     return author;
+  }
+
+  private validatePublishedDate(publishedDate: Date) {
+    const date = publishedDate
+      .toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+    const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+    const validate = regex.test(date);
+    if (!validate) throw new Error('publishedDate is invalid');
   }
 
   private async validateForeignKeys(

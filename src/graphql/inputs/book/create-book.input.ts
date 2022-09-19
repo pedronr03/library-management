@@ -17,7 +17,6 @@ class CreateBookInput {
   rating: number;
 
   @Field()
-  @IsDate()
   publishedDate: Date;
 
   @Field(type => Int, { nullable: true })
