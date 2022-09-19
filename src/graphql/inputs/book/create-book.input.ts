@@ -1,5 +1,5 @@
 import { Field, Float, InputType, Int } from "type-graphql";
-import { IsDate, Length } from 'class-validator';
+import { Length } from 'class-validator';
 
 @InputType()
 class CreateBookInput {
