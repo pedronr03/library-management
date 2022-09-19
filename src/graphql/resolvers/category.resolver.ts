@@ -9,7 +9,7 @@ class CategoryResolver {
   constructor(private readonly prisma = new PrismaClient()) {}
 
   @Query((returns) => [Category])
-  async getCategories() {
+  getCategories() {
     return this.prisma.category.findMany();
   }
 
@@ -30,8 +30,8 @@ class CategoryResolver {
   @Mutation((returns) => Category)
   async updateCategory(@Arg("categoryData") categoryData: UpdateCategoryInput) {
     const categorySearch = await this.getCategory(categoryData.id);
-    await this.validateName(categoryData?.name);
     const updatedCategory = { ...categorySearch, ...categoryData };
+    await this.validateName(updatedCategory.name);
     await this.prisma.category.update({
       where: { id: updatedCategory.id },
       data: updatedCategory,
